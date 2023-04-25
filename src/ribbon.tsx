@@ -15,7 +15,7 @@ import { TabContext, TabPanel as MuiTabPanel } from "@mui/lab";
 import CustomRibbonButton from "./CustomRibbonButton";
 import CustomRibbonButtonGroup from "./CustomRibbonButtonGroup";
 import RibbonSplitButton from './RibbonSplitButton';
-import RibbonButton from './RibbonButton';
+import RibbonButton, { RibbonButtonProps } from './RibbonButton';
 import RibbonIconButton from './RibbonIconButton';
 import BasicSpeedDial from "./speeddial/BasicSpeedDial";
 import { styled, useTheme } from "@mui/system";
@@ -29,12 +29,14 @@ interface RibbonIconProps {
 interface ButtonProps {
   key: number;
   caption: string;
+  iconName?: string; // Agregue esta línea
   icon: JSX.Element | null;
   onClick: () => void;
 }
 
 interface RibbonProps {
   ribbonTabs: any[];
+  onButtonClick?: (button: typeof RibbonButton) => void;
 }
 
 const componentMap = {
@@ -88,7 +90,7 @@ const StyledTabPanel = styled(MuiTabPanel)(({ theme }) => ({
   width: '100%'
 }));
 
-const convertIconName = (iconName) => {
+const convertIconName = (iconName: string) => {
   return iconName;
 };
 
@@ -98,7 +100,7 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, onButtonClick }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const RibbonIcon = ({ iconName }) => {
+  const RibbonIcon = ({ iconName }: RibbonIconProps) => {
     if (!iconName) {
       return { iconComponent: null, displayIcon: false };
     }
@@ -112,11 +114,11 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, onButtonClick }) => {
     return { iconComponent: <IconComponent />, displayIcon: true };
   };
 
-  const handleTabChange = useCallback((event, newValue) => {
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTabIndex(newValue);
   }, []);
 
-  const renderReactComponent = useCallback((button, index) => {
+  const renderReactComponent = useCallback((buttons: ButtonProps[], index: number) => {
     const Component = componentMap[button.component];
 
     if (!Component) return null;
@@ -226,7 +228,7 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, onButtonClick }) => {
 
   return (
     <>
-      <TabContext value={selectedTabIndex.toString()}>
+            <TabContext value={selectedTabIndex.toString()}>
         {isMobile ? (
           <StyledMobileStepper
             activeStep={selectedTabIndex}
