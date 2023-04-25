@@ -33,12 +33,11 @@ interface ButtonProps {
   icon: JSX.Element | null;
   onClick: () => void;
 }
-
 interface RibbonProps {
   ribbonTabs: any[];
+  customTabs?: any[]; // Agrega esta línea
   onButtonClick?: (button: typeof RibbonButton) => void;
 }
-
 const componentMap = {
   Input: Input,
   TextArea: TextareaAutosize,
@@ -94,7 +93,8 @@ const convertIconName = (iconName: string) => {
   return iconName;
 };
 
-const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, onButtonClick }) => {
+const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }) => {
+  const tabsToUse = customTabs ? customTabs : ribbonTabs;
   const [selectedTabIndex, setSelectedTabIndex] = React.useState(0);
 
   const theme = useTheme();
@@ -116,9 +116,9 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, onButtonClick }) => {
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTabIndex(newValue);
-  }, []);
+  };
 
-  const renderReactComponent = useCallback((buttons: ButtonProps[], index: number) => {
+  const renderReactComponent = useCallback((button: ButtonProps[], index: number) => {
     const Component = componentMap[button.component];
 
     if (!Component) return null;
@@ -268,7 +268,7 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, onButtonClick }) => {
             variant="scrollable"
             scrollButtons="auto"
           >
-            {ribbonTabs.map((tab, tabIndex) => (
+            {tabsToUse.map((tab, tabIndex) => (
               <StyledTab
                 key={tabIndex}
                 label={tab.label}
@@ -279,7 +279,7 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, onButtonClick }) => {
           </StyledTabs>
         )}
 
-        {ribbonTabs.map((tab, tabIndex) => (
+        {tabsToUse.map((tab, tabIndex) => (
           <StyledTabPanel
             key={tabIndex}
             value={tabIndex.toString()}
