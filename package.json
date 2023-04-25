@@ -7,9 +7,9 @@
     "build": "webpack --mode production",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["Ribbon", "React", "menu", "interface", "UI", "component", "frontend", "web development"],
   "author": "Raul Gonzalez",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.127",
