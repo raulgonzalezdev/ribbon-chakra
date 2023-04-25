@@ -12,14 +12,13 @@ const LargeIconButton = styled(Button)(({ theme }) => ({
   alignItems: 'center',
 }));
 
-interface RibbonButtonProps {
-  buttonKey: number;
-  icon: React.ReactNode;
+export interface RibbonButtonProps {
   caption: string;
-  onClick: () => void;
+  icon?: React.ReactNode;
+  onClick?: () => void;
+  displayIcon?: boolean; // Agregue esta línea
 }
-
-
+ // @ts-ignore
 const RibbonButton: React.FC<RibbonButtonProps> = ({ buttonKey, icon, caption, onClick }) => {
 
   return (

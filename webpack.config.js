@@ -8,12 +8,18 @@ module.exports = {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js", ".json"],
+    modules: [path.resolve(__dirname, "node_modules"), "node_modules"],
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: "ts-loader",
+        use: {
+          loader: "ts-loader",
+          options: {
+            transpileOnly: true,
+          },
+        },
         exclude: /node_modules/,
       },
       {
@@ -23,3 +29,4 @@ module.exports = {
     ],
   },
 };
+

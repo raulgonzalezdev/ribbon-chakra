@@ -11,7 +11,9 @@ import MenuList from "@mui/material/MenuList";
 import Divider from "@mui/material/Divider";
 import { styled } from "@mui/system";
 
-type OptionType = string | { type: "divider" };
+type ButtonType = React.ReactNode;
+type OptionType = ButtonType | { type: "divider"; component: React.ReactNode };
+
 
 interface RibbonSplitButtonProps {
   options: OptionType[];
@@ -46,8 +48,6 @@ const CustomMenuItem = styled(MenuItem)`
   font-size: 0.8rem;
 `;
 
-
-
 const RibbonSplitButton: React.FC<RibbonSplitButtonProps> = ({
   options,
   defaultSelectedIndex,
@@ -65,16 +65,17 @@ const RibbonSplitButton: React.FC<RibbonSplitButtonProps> = ({
       console.warn("No options available or invalid selectedIndex.");
     }
   };
-  const handleMenuItemClick = (event: React.MouseEvent<HTMLLIElement>, index: number) => {
+  const handleMenuItemClick = (event: React.MouseEvent<HTMLElement>, index: number) => {
     setSelectedIndex(index);
     setOpen(false);
   };
+
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
 
-  const handleClose = (event: React.MouseEvent<Document>) => {
+  const handleClose = (event: React.MouseEvent | React.TouchEvent) => {
     if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
       return;
     }
@@ -92,13 +93,18 @@ const RibbonSplitButton: React.FC<RibbonSplitButtonProps> = ({
         {!displayIcon && (
           <Button onClick={handleClick}>
             {options && options[selectedIndex] ? (
-              typeof options[selectedIndex] === "string"
-                ? options[selectedIndex]
-                : ""
+              // @ts-ignore
+              <React.Fragment>
+                  {/* @ts-ignore */}
+                 {typeof options[selectedIndex] === "string"
+                  ? options[selectedIndex]
+                  : options[selectedIndex]}
+              </React.Fragment>
             ) : (
               ""
             )}
           </Button>
+
         )}
         <Button
           size="small"
@@ -132,25 +138,26 @@ const RibbonSplitButton: React.FC<RibbonSplitButtonProps> = ({
             }}
           >
             <Paper>
+               {/* @ts-ignore */}
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList id="split-button-menu" autoFocusItem>
                   {options &&
                     Array.isArray(options) &&
                     options.map((option, index) =>
-                      typeof option === "object" && option.type === "divider" ? (
+                      typeof option === "object" && option !== null && "type" in option && option.type === "divider" ? (
                         <Divider key={`divider-${index}`} />
                       ) : (
                         <CustomMenuItem
                           key={typeof option === "string" ? option : `option-${index}`}
                           selected={index === selectedIndex}
-                          onClick={(event) =>
-                            handleMenuItemClick(event, index)
-                          }
+                          // @ts-ignore
+                          onClick={(event) => handleMenuItemClick(event, index)}
                         >
                           {typeof option === "string" ? option : ""}
                         </CustomMenuItem>
                       )
                     )}
+
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -162,3 +169,4 @@ const RibbonSplitButton: React.FC<RibbonSplitButtonProps> = ({
 };
 
 export default RibbonSplitButton;
+

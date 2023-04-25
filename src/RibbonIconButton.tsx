@@ -3,15 +3,15 @@ import { Button } from '@mui/material';
 import { styled } from '@mui/system';
 
 const SmallIconButton = styled(Button)(({ theme }) => ({
-  padding: theme.spacing(0.5), // reducir el padding a la mitad
+  padding: theme.spacing(0.5),
   minWidth: 'auto',
   minHeight: 'auto',
   textTransform: 'none',
-  '& .MuiSvgIcon-root': { // seleccionar el icono dentro del botón y aplicar estilos
-    fontSize: '1rem', // disminuir el tamaño de fuente del icono
+  '& .MuiSvgIcon-root': {
+    fontSize: '1rem',
   },
-  '& .MuiButton-label': { // seleccionar el texto dentro del botón y aplicar estilos
-    fontSize: '0.8rem', // disminuir el tamaño de fuente del texto
+  '& .MuiButton-label': {
+    fontSize: '0.8rem',
   },
 }));
 
@@ -20,10 +20,9 @@ interface RibbonIconButtonProps {
   caption: string;
   onClick: () => void;
   textPosition?: 'left' | 'right';
- 
 }
 
-const RibbonIconButton: React.FC<RibbonIconButtonProps> = ({ icon, caption, onClick, textPosition = 'right', key }) => {
+const RibbonIconButton: React.FC<RibbonIconButtonProps> = ({ icon, caption, onClick, textPosition = 'right' }) => {
   return (
     <SmallIconButton onClick={onClick}>
       {textPosition === 'left' && <span style={{ marginRight: '0.5rem' }}>{caption}</span>}
@@ -34,5 +33,6 @@ const RibbonIconButton: React.FC<RibbonIconButtonProps> = ({ icon, caption, onCl
 };
 
 export default RibbonIconButton;
+
 
 

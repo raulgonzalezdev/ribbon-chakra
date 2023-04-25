@@ -13,23 +13,15 @@ const CustomRibbonTab: React.FC<CustomMaterialRibbonTabProps> = ({
   icon,
   ...rest
 }) => {
-  const iconElement = icon ? <HomeIcon /> : null;
-
   return (
     <Tab
       {...rest}
       label={label}
-      icon={iconElement}
+      // @ts-ignore
+      icon={icon && <HomeIcon />}
       style={{ display: "flex", flexDirection: "row" }}
     />
   );
 };
 
 export default CustomRibbonTab;
-
-
-
-
-
-
-

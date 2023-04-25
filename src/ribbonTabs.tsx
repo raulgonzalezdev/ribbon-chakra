@@ -1,3 +1,4 @@
+import { ChangeEvent } from "react";
 export const ribbonTabs = [
   {
     label: "Home",
@@ -202,7 +203,7 @@ export const ribbonTabs = [
             component: "Input",
             caption: "Input",
             options: {},
-            onChange: (event) => {
+            onChange: (event: ChangeEvent<HTMLInputElement>) => {
               console.log("Input value:", event.target.value);
             },
           },
@@ -211,8 +212,8 @@ export const ribbonTabs = [
             component: "TextArea",
             caption: "TextArea",
             options: { rows: 3 },
-            onChange: (event) => {
-              console.log("TextArea value:", event.target.value);
+            onChange: (event: ChangeEvent<HTMLInputElement>) => {
+              console.log("Text Area value:", event.target.value);
             },
           },
           {
@@ -226,7 +227,7 @@ export const ribbonTabs = [
                 { value: "option3", label: "Option 3" },
               ],
             },
-            onChange: (event) => {
+            onChange: (event: ChangeEvent<HTMLInputElement>) => {
               console.log("Selected value:", event.target.value);
             },
           },
@@ -237,7 +238,7 @@ export const ribbonTabs = [
             options: {
               color: "primary",
             },
-            onChange: (event) => {
+            onChange: (event: ChangeEvent<HTMLInputElement>) => {
               console.log("Switch toggled:", event.target.checked);
             },
           },
