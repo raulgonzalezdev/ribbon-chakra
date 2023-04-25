@@ -43,21 +43,21 @@ Este código define la estructura para crear una cinta de opciones personalizada
 
 El objeto ribbonTabs contiene un array de objetos que definen cada pestaña de la cinta de opciones. Cada objeto tiene las siguientes propiedades:
 
-- *label:* el texto que se muestra en la pestaña
-- *mode:* el modo de visualización de la pestaña (por defecto, default)
-- *icon:* el icono que se muestra en la pestaña
-- *buttonGroups:* un array de objetos que definen cada grupo de botones de la pestaña. Cada objeto tiene las siguientes propiedades:
-- *flexDirection:* la dirección en la que se muestran los botones (row para horizontal o column para vertical)
-- *caption:* el texto que se muestra debajo del grupo de botones
-- *buttons:* un array de objetos que definen cada botón del grupo. Cada objeto tiene las siguientes propiedades:
-- *type:* el tipo de botón *(RibbonButton, RibbonIconButton, RibbonSplitButton o RibbonReactComponent)*
-- *caption:* el texto que se muestra en el botón
-- *icon:* el icono que se muestra en el botón
-- *route:* la ruta que se activa al hacer clic en el botón (opcional)
-- *dropdownItems:* un array de objetos que definen los elementos del menú desplegable del botón dividido (opcional)
-- *component:* el componente React que se renderiza en el botón React Component (opcional)
-- *options:* un objeto que contiene las opciones para el componente React (opcional)
-- *onChange:* un manejador de eventos que se ejecuta cuando cambia el valor del componente React (opcional)
+- **label:** el texto que se muestra en la pestaña
+- **mode:** el modo de visualización de la pestaña (por defecto, default)
+- **icon:** el icono que se muestra en la pestaña
+- **buttonGroups:** un array de objetos que definen cada grupo de botones de la pestaña. Cada objeto tiene las siguientes propiedades:
+- **flexDirection:** la dirección en la que se muestran los botones (row para horizontal o column para vertical)
+- **caption:** el texto que se muestra debajo del grupo de botones
+- **buttons:** un array de objetos que definen cada botón del grupo. Cada objeto tiene las siguientes propiedades:
+- **type:** el tipo de botón **(RibbonButton, RibbonIconButton, RibbonSplitButton o RibbonReactComponent)**
+- **caption:** el texto que se muestra en el botón
+- **icon:** el icono que se muestra en el botón
+- **route:** la ruta que se activa al hacer clic en el botón (opcional)
+- **dropdownItems:** un array de objetos que definen los elementos del menú desplegable del botón dividido (opcional)
+- **component:** el componente React que se renderiza en el botón React Component (opcional)
+- **options:** un objeto que contiene las opciones para el componente React (opcional)
+- **onChange:** un manejador de eventos que se ejecuta cuando cambia el valor del componente React (opcional)
 
 En este caso, el objeto ribbonTabs define varias pestañas, cada una con grupos de botones que ejecutan diferentes acciones. Por ejemplo, la primera pestaña tiene un grupo de botones de portapapeles y un grupo de botones de estilo. La segunda pestaña tiene un grupo de botones de ejemplo, mientras que la tercera pestaña tiene grupos de botones de inserción, diseño, opciones y vista. La última pestaña contiene grupos de botones personalizados que utilizan componentes React.
 
@@ -206,15 +206,16 @@ export default App;
 
 Este proyecto utiliza las siguientes dependencias:
 
-@mui/icons-material
-@mui/lab
-@mui/material
-@mui/system
-@emotion/react
-@emotion/styled
-next
-react
-react-dom
+
+**@mui/icons-material**
+**@mui/lab**
+**@mui/material**
+**@mui/system**
+**@emotion/react**
+**@emotion/styled**
+**next**
+**react**
+**react-dom**
 
 ## Desarrollo
 
