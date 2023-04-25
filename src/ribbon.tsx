@@ -15,7 +15,7 @@ import { TabContext, TabPanel as MuiTabPanel } from "@mui/lab";
 import CustomRibbonButton from "./CustomRibbonButton";
 import CustomRibbonButtonGroup from "./CustomRibbonButtonGroup";
 import RibbonSplitButton from './RibbonSplitButton';
-import RibbonButton, { RibbonButtonProps } from './RibbonButton';
+import RibbonButton from './RibbonButton';
 import RibbonIconButton from './RibbonIconButton';
 import BasicSpeedDial from "./speeddial/BasicSpeedDial";
 import { styled, useTheme } from "@mui/system";
@@ -29,14 +29,12 @@ interface RibbonIconProps {
 interface ButtonProps {
   key: number;
   caption: string;
-  iconName?: string; // Agregue esta línea
   icon: JSX.Element | null;
   onClick: () => void;
 }
 
 interface RibbonProps {
   ribbonTabs: any[];
-  onButtonClick?: (button: typeof RibbonButton) => void;
 }
 
 const componentMap = {
@@ -90,7 +88,7 @@ const StyledTabPanel = styled(MuiTabPanel)(({ theme }) => ({
   width: '100%'
 }));
 
-const convertIconName = (iconName: string) => {
+const convertIconName = (iconName) => {
   return iconName;
 };
 
@@ -100,7 +98,7 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, onButtonClick }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const RibbonIcon = ({ iconName }: RibbonIconProps) => {
+  const RibbonIcon = ({ iconName }) => {
     if (!iconName) {
       return { iconComponent: null, displayIcon: false };
     }
@@ -114,50 +112,220 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, onButtonClick }) => {
     return { iconComponent: <IconComponent />, displayIcon: true };
   };
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = useCallback((event, newValue) => {
     setSelectedTabIndex(newValue);
+  }, []);
+
+  const renderReactComponent = useCallback((button, index) => {
+    const Component = componentMap[button.component];
+
+    if (!Component) return null;
+
+    const wrappedComponent =
+      button.component === "Select" ? (
+        <Component onChange={button.onChange}>
+          {button.options.items.map((item, itemIndex) => (
+            <MenuItem key={itemIndex} value={item.value}>
+              {item.label}
+            </MenuItem>
+          ))}
+        </Component>
+      ) : (
+        <Component {...button.options} onChange={button.onChange} />
+      );
+
+    return (
+      <div
+        style={{ display: "inline-flex", flexDirection: "row" }}
+        key={index}
+      >
+        <CustomRibbonButton caption={button.caption}>
+          {wrappedComponent}
+        </CustomRibbonButton>
+      </div>
+    );
+  }, []);
+
+
+  interface RibbonButton extends ButtonProps {
+    component?: string;
+    type?: string;
+    icon?: string;
+    onClick?: () => void;
+    // Agrega aquí las propiedades adicionales de un botón según sea necesario
+  }
+
+  const renderButton = useCallback((button: RibbonButton, index: number) => {
+    if (componentMap[button.component]) {
+      return renderReactComponent(button, index);
+    }
+    const ribbonIconResult = RibbonIcon({ iconName: button.icon });
+    const buttonProps = {
+      buttonKey: index,
+      caption: button.caption,
+      icon: ribbonIconResult.iconComponent,
+      onClick: () => {
+        console.log(`Clic en el botón: ${button.icon}`);
+        button.onClick && button.onClick();
+        onButtonClick && onButtonClick(button);
+      },
+    };
+
+    switch (button.type) {
+      case "RibbonButton":
+        return <RibbonButton {...buttonProps} />;
+      case "RibbonIconButton":
+        return <RibbonIconButton {...buttonProps} />;
+      case "RibbonSplitButton":
+        const splitButtonOptions = button.dropdownItems.map((item) => item.caption);
+        const ribbonIconResult = RibbonIcon({ iconName: button.icon });
+        return (
+          <RibbonSplitButton
+            key={index}
+            options={splitButtonOptions}
+            defaultSelectedIndex={button.defaultSelectedIndex}
+            icon={ribbonIconResult.iconComponent}
+            displayIcon={ribbonIconResult.displayIcon}
+          />
+        );
+      default:
+        return null;
+    }
+  }, [onButtonClick]);
+
+  const wrapWithLink = (button, buttonComponent) => {
+    return button.route ? (
+      <Link href={button.route}>
+        <span style={{ textDecoration: 'none', cursor: 'pointer' }}>{buttonComponent}</span>
+      </Link>
+    ) : (
+      buttonComponent
+    );
   };
 
-  const renderButtons = (buttons: ButtonProps[]) => {
-    return buttons.map((button, index) => {
-      const { iconName } = button;
-      const { iconComponent, displayIcon } = RibbonIcon({ iconName });
 
+  const renderButtons = useCallback((buttons, parentKey = '') => {
+    return buttons.map((button, index) => {
+      const buttonElement = renderButton(button, index);
       return (
-        <RibbonButton
-          key={index}
-          caption={button.caption}
-          icon={iconComponent}
-          onClick={button.onClick}
-          displayIcon={displayIcon}
-        />
+        <React.Fragment key={`${parentKey}-${index}`}>
+          {wrapWithLink(button, buttonElement)}
+        </React.Fragment>
       );
     });
-  };
+  }, [onButtonClick]);
+  
+
+  const chunkArray = useCallback((array, chunkSize) => {
+    const results = [];
+    while (array.length) {
+      results.push(array.splice(0, chunkSize));
+    }
+    return results;
+  }, []);
 
   return (
-    <TabContext value={String(selectedTabIndex)}>
-      <StyledTabs
-        value={selectedTabIndex}
-        onChange={handleTabChange}
-        textColor="primary"
-        indicatorColor="primary"
-        variant="scrollable"
-        scrollButtons="auto"
-        aria-label="Ribbon Tabs"
-      >
-        {ribbonTabs.map((tab, index) => (
-          <StyledTab key={index} label={tab.title} />
+    <>
+      <TabContext value={selectedTabIndex.toString()}>
+        {isMobile ? (
+          <StyledMobileStepper
+            activeStep={selectedTabIndex}
+            steps={ribbonTabs.length}
+            position="static"
+            nextButton={
+              <IconButton
+                size="small"
+                onClick={() =>
+                  setSelectedTabIndex((prev) =>
+                    prev === ribbonTabs.length - 1 ? 0 : prev + 1
+                  )
+                }
+                aria-label="next"
+              >
+                <KeyboardArrowRight />
+              </IconButton>
+            }
+            backButton={
+              <IconButton
+                size="small"
+                onClick={() =>
+                  setSelectedTabIndex((prev) =>
+                    prev === 0 ? ribbonTabs.length - 1 : prev - 1
+                  )
+                }
+                aria-label="back"
+              >
+                <KeyboardArrowLeft />
+              </IconButton>
+            }
+          />
+        ) : (
+          <StyledTabs
+            value={selectedTabIndex}
+            onChange={handleTabChange}
+            variant="scrollable"
+            scrollButtons="auto"
+          >
+            {ribbonTabs.map((tab, tabIndex) => (
+              <StyledTab
+                key={tabIndex}
+                label={tab.label}
+                iconPosition="start"
+                icon={RibbonIcon({ iconName: tab.icon }).iconComponent}
+              />
+            ))}
+          </StyledTabs>
+        )}
+
+        {ribbonTabs.map((tab, tabIndex) => (
+          <StyledTabPanel
+            key={tabIndex}
+            value={tabIndex.toString()}
+            id={`tabpanel-${tabIndex}`}
+            aria-labelledby={`tab-${tabIndex}`}
+          >
+            {tab.buttonGroups.map((group, groupIndex) => {
+              if (group.flexDirection === "column") {
+                const chunkedButtons = chunkArray([...group.buttons], 2);
+
+                return chunkedButtons.map((chunk, chunkIndex) => (
+                  <CustomRibbonButtonGroup
+                    key={`${groupIndex}-${chunkIndex}`}
+                    style={{
+                      flexDirection: group.flexDirection,
+                      paddingTop: "0.5rem",
+                      paddingBottom: "0.5rem",
+                    }}
+                    caption={group.caption}
+                  >
+                    {renderButtons(chunk, `${groupIndex}-${chunkIndex}`)}
+                  </CustomRibbonButtonGroup>
+                ));
+              } else {
+                return (
+                  <CustomRibbonButtonGroup
+                    key={groupIndex}
+                    style={{
+                      flexDirection: group.flexDirection,
+                      paddingTop: "0.5rem",
+                      paddingBottom: "0.5rem",
+                    }}
+                    caption={group.caption}
+                  >
+                    {renderButtons(group.buttons, groupIndex)}
+                  </CustomRibbonButtonGroup>
+                );
+              }
+            })}
+
+            <BasicSpeedDial />
+          </StyledTabPanel>
         ))}
-      </StyledTabs>
-      {ribbonTabs.map((tab, index) => (
-        <StyledTabPanel key={index} value={String(index)}>
-          {renderButtons(tab.buttons)}
-        </StyledTabPanel>
-      ))}
-    </TabContext>
+      </TabContext>
+    </>
   );
 };
 
 export default Ribbon;
+
 
