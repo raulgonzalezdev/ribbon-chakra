@@ -1,16 +1,5 @@
-import React from 'react';
-import { Button } from '@mui/material';
-import { styled } from '@mui/system';
-
-const LargeIconButton = styled(Button)(({ theme }) => ({
-  padding: theme.spacing(1),
-  minWidth: 'auto',
-  minHeight: 'auto',
-  textTransform: 'none',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-}));
+import React from "react";
+import { Button, Box } from "@chakra-ui/react";
 
 export interface RibbonButtonProps {
   caption: string;
@@ -18,17 +7,28 @@ export interface RibbonButtonProps {
   onClick?: () => void;
   displayIcon?: boolean; // Agregue esta línea
 }
- // @ts-ignore
-const RibbonButton: React.FC<RibbonButtonProps> = ({ buttonKey, icon, caption, onClick }) => {
 
+const RibbonButton: React.FC<RibbonButtonProps> = ({
+  buttonKey,
+  icon,
+  caption,
+  onClick,
+}) => {
   return (
-    <LargeIconButton onClick={onClick}>
+    <Button
+      onClick={onClick}
+      padding="1"
+      minWidth="auto"
+      minHeight="auto"
+      textTransform="none"
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+    >
       {icon}
-      <span style={{ fontSize: '0.8rem', marginTop: '0.5rem' }}>{caption}</span>
-    </LargeIconButton>
+      <Box fontSize="0.8rem" mt="0.5rem">{caption}</Box>
+    </Button>
   );
 };
 
 export default RibbonButton;
-
-

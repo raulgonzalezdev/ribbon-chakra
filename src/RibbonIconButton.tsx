@@ -1,38 +1,39 @@
-import React from 'react';
-import { Button } from '@mui/material';
-import { styled } from '@mui/system';
-
-const SmallIconButton = styled(Button)(({ theme }) => ({
-  padding: theme.spacing(0.5),
-  minWidth: 'auto',
-  minHeight: 'auto',
-  textTransform: 'none',
-  '& .MuiSvgIcon-root': {
-    fontSize: '1rem',
-  },
-  '& .MuiButton-label': {
-    fontSize: '0.8rem',
-  },
-}));
+import React from "react";
+import { Button, Box } from "@chakra-ui/react";
 
 interface RibbonIconButtonProps {
   icon: React.ReactNode;
   caption: string;
   onClick: () => void;
-  textPosition?: 'left' | 'right';
+  textPosition?: "left" | "right";
 }
 
-const RibbonIconButton: React.FC<RibbonIconButtonProps> = ({ icon, caption, onClick, textPosition = 'right' }) => {
+const RibbonIconButton: React.FC<RibbonIconButtonProps> = ({
+  icon,
+  caption,
+  onClick,
+  textPosition = "right",
+}) => {
   return (
-    <SmallIconButton onClick={onClick}>
-      {textPosition === 'left' && <span style={{ marginRight: '0.5rem' }}>{caption}</span>}
-      {icon}
-      {textPosition === 'right' && <span style={{ marginLeft: '0.5rem' }}>{caption}</span>}
-    </SmallIconButton>
+    <Button
+      onClick={onClick}
+      padding="0.5"
+      minWidth="auto"
+      minHeight="auto"
+      textTransform="none"
+      _hover={{ textDecoration: "none" }}
+    >
+      <Box display="flex" alignItems="center">
+        {textPosition === "left" && (
+          <Box fontSize="0.8rem" mr="0.5rem">{caption}</Box>
+        )}
+        {icon}
+        {textPosition === "right" && (
+          <Box fontSize="0.8rem" ml="0.5rem">{caption}</Box>
+        )}
+      </Box>
+    </Button>
   );
 };
 
 export default RibbonIconButton;
-
-
-

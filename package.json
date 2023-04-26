@@ -8,16 +8,24 @@
     "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["Ribbon", "React", "menu", "interface", "UI", "component", "frontend", "web development"],
+  "keywords": [
+    "Ribbon",
+    "React",
+    "menu",
+    "interface",
+    "UI",
+    "component",
+    "frontend",
+    "web development"
+  ],
   "author": "Raul Gonzalez",
   "license": "MIT",
   "dependencies": {
-    "@mui/icons-material": "^5.11.16",
-    "@mui/lab": "^5.0.0-alpha.127",
-    "@mui/material": "^5.12.1",
-    "@mui/system": "^5.12.1",
+    "@chakra-ui/icons": "^2.0.19",
+    "@chakra-ui/react": "^2.6.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.16",
     "next": "^13.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

@@ -1,26 +1,23 @@
 import React from "react";
-import { Tab } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
+import { Tab } from "@chakra-ui/react";
+import { HomeIcon } from "@chakra-ui/icons";
 
-interface CustomMaterialRibbonTabProps {
+interface CustomChakraRibbonTabProps {
   label: string;
   icon?: boolean;
   rest?: any;
 }
 
-const CustomRibbonTab: React.FC<CustomMaterialRibbonTabProps> = ({
+const CustomRibbonTab: React.FC<CustomChakraRibbonTabProps> = ({
   label,
   icon,
   ...rest
 }) => {
   return (
-    <Tab
-      {...rest}
-      label={label}
-      // @ts-ignore
-      icon={icon && <HomeIcon />}
-      style={{ display: "flex", flexDirection: "row" }}
-    />
+    <Tab {...rest} display="flex" flexDirection="row">
+      {icon && <HomeIcon />}
+      {label}
+    </Tab>
   );
 };
 
