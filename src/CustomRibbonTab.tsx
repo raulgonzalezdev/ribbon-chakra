@@ -1,6 +1,6 @@
 import React from "react";
 import { Tab } from "@chakra-ui/react";
-import { HomeIcon } from "@chakra-ui/icons";
+import { PhoneIcon } from "@chakra-ui/icons";
 
 interface CustomChakraRibbonTabProps {
   label: string;
@@ -15,7 +15,7 @@ const CustomRibbonTab: React.FC<CustomChakraRibbonTabProps> = ({
 }) => {
   return (
     <Tab {...rest} display="flex" flexDirection="row">
-      {icon && <HomeIcon />}
+      {icon && <PhoneIcon />}
       {label}
     </Tab>
   );
