@@ -20,8 +20,12 @@ import CustomRibbonButtonGroup from "./CustomRibbonButtonGroup";
 import { ribbonTabs } from "./ribbonTabs";
 import { RibbonProps, RibbonButtonGroup, RibbonIconProps, ButtonProps } from './interfaces';
 
-const Ribbon: React.FC<RibbonProps> = ({ customTabs }) => {
-  const tabsToUse = customTabs || ribbonTabs;
+const Ribbon: React.FC<RibbonProps> = ({ customTabs, onButtonClick }) => {
+
+   
+    const tabsToUse = customTabs ? customTabs : ribbonTabs ? ribbonTabs : [];
+    console.log(tabsToUse)
+
   const [selectedTabIndex, setSelectedTabIndex] = React.useState(0);
   const isMobile = false; // Reemplace esto con su lógica para manejar dispositivos móviles
 
