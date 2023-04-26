@@ -1,6 +1,6 @@
 {
   "name": "ribbon-chakra",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Menu Ribbon para React + Chakra UI",
   "main": "dist/index.js",
   "scripts": {
