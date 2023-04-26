@@ -39,6 +39,8 @@ import Ribbon from "ribbon-react-menu";
 ```
 2. Utiliza el componente Ribbon en tu aplicación, proporcionando las propiedades necesarias:
 
+**En el archivo src/ribbonTabs.tsx  hay una estructura completa de la forma como puedes personalizar sus menus. Para los Iconos se recomienda los de la libreria Material UI**
+
 Este código define la estructura para crear una cinta de opciones personalizada utilizando el componente Ribbon. El primer parámetro de Ribbon es opcional y se puede utilizar para proporcionar una estructura personalizada de tabs y botones. Si no se proporciona, el componente creará un menú predefinido.
 
 El objeto ribbonTabs contiene un array de objetos que definen cada pestaña de la cinta de opciones. Cada objeto tiene las siguientes propiedades:

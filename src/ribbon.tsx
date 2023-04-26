@@ -18,9 +18,14 @@ import RibbonSplitButton from './RibbonSplitButton';
 import RibbonButton, { RibbonButtonProps } from './RibbonButton';
 import RibbonIconButton from './RibbonIconButton';
 import BasicSpeedDial from "./speeddial/BasicSpeedDial";
+import { ribbonTabs } from "./ribbonTabs"
 import { styled, useTheme } from "@mui/system";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import Link from 'next/link';
+import { ThemeProvider, createTheme } from '@mui/system';
+
+
+
 
 interface RibbonIconProps {
   iconName?: string;
@@ -29,21 +34,32 @@ interface RibbonIconProps {
 interface ButtonProps {
   key: number;
   caption: string;
-  iconName?: string; // Agregue esta línea
-  icon: JSX.Element | null;
-  onClick: () => void;
+  iconName?: string;
+  icon?: JSX.Element | string | null; // Modificar esta línea
+  onClick?: () => void;
 }
+
 interface RibbonProps {
-  ribbonTabs: any[];
+ 
   customTabs?: any[]; // Agrega esta línea
   onButtonClick?: (button: typeof RibbonButton) => void;
 }
-const componentMap = {
+
+interface RibbonButtonGroup {
+  caption?: string;
+  flexDirection?: "row" | "column";
+  buttons: typeof RibbonButton[];
+
+}
+
+
+const componentMap: { [key: string]: any } = {
   Input: Input,
   TextArea: TextareaAutosize,
   Select: Select,
   Switch: Switch,
 };
+
 
 const StyledMobileStepper = styled(MobileStepper)(({ theme }) => ({
   flexGrow: 1,
@@ -93,11 +109,23 @@ const convertIconName = (iconName: string) => {
   return iconName;
 };
 
-const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }) => {
-  const tabsToUse = customTabs ? customTabs : ribbonTabs;
+const Ribbon: React.FC<RibbonProps> = ({  customTabs, onButtonClick }) => {
+  const themex = createTheme({
+    palette: {
+       primary: {
+         main: '#1b5a90'
+       },
+    
+     },
+   });
+ 
+  const tabsToUse = customTabs ? customTabs : ribbonTabs ? ribbonTabs : [];
+  
+
+  
   const [selectedTabIndex, setSelectedTabIndex] = React.useState(0);
 
-  const theme = useTheme();
+  let theme = useTheme(themex);
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const RibbonIcon = ({ iconName }: RibbonIconProps) => {
@@ -118,15 +146,16 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }
     setSelectedTabIndex(newValue);
   };
 
-  const renderReactComponent = useCallback((button: ButtonProps[], index: number) => {
-    const Component = componentMap[button.component];
+  const renderReactComponent = useCallback((button: RibbonButton, index: number) => {
+    const Component = button.component ? componentMap[button.component] : undefined;
+
 
     if (!Component) return null;
 
     const wrappedComponent =
       button.component === "Select" ? (
         <Component onChange={button.onChange}>
-          {button.options.items.map((item, itemIndex) => (
+          {button.options.items.map((item: { value: string | number | readonly string[] | undefined; label: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | React.ReactPortal | null | undefined; }, itemIndex: React.Key | null | undefined) => (
             <MenuItem key={itemIndex} value={item.value}>
               {item.label}
             </MenuItem>
@@ -154,11 +183,20 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }
     type?: string;
     icon?: string;
     onClick?: () => void;
-    // Agrega aquí las propiedades adicionales de un botón según sea necesario
+    onChange?: () => void; // Agregue esta línea
+    options?: any; // Agregue esta línea
+    dropdownItems?: any[];
+    defaultSelectedIndex?: number;
+    route?: string;    // Agrega aquí las propiedades adicionales de un botón según sea necesario
   }
 
+  // interface RibbonButton extends Omit<ButtonProps, 'onClick'> {
+  //   onClick?: () => void;
+  // }
+
   const renderButton = useCallback((button: RibbonButton, index: number) => {
-    if (componentMap[button.component]) {
+    if (button.component && componentMap[button.component]) {
+
       return renderReactComponent(button, index);
     }
     const ribbonIconResult = RibbonIcon({ iconName: button.icon });
@@ -169,7 +207,10 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }
       onClick: () => {
         console.log(`Clic en el botón: ${button.icon}`);
         button.onClick && button.onClick();
+        //@ts-ignore
         onButtonClick && onButtonClick(button);
+
+
       },
     };
 
@@ -179,7 +220,11 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }
       case "RibbonIconButton":
         return <RibbonIconButton {...buttonProps} />;
       case "RibbonSplitButton":
-        const splitButtonOptions = button.dropdownItems.map((item) => item.caption);
+        const splitButtonOptions = button.dropdownItems
+          ? button.dropdownItems.map((item) => item.caption)
+          : [];
+
+
         const ribbonIconResult = RibbonIcon({ iconName: button.icon });
         return (
           <RibbonSplitButton
@@ -195,7 +240,7 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }
     }
   }, [onButtonClick]);
 
-  const wrapWithLink = (button, buttonComponent) => {
+  const wrapWithLink = (button: RibbonButton, buttonComponent: string | number | boolean | JSX.Element | React.ReactFragment | null | undefined) => {
     return button.route ? (
       <Link href={button.route}>
         <span style={{ textDecoration: 'none', cursor: 'pointer' }}>{buttonComponent}</span>
@@ -206,7 +251,7 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }
   };
 
 
-  const renderButtons = useCallback((buttons, parentKey = '') => {
+  const renderButtons = useCallback((buttons: RibbonButton[], parentKey: React.Key | null | undefined = '') => {
     return buttons.map((button, index) => {
       const buttonElement = renderButton(button, index);
       return (
@@ -216,9 +261,9 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }
       );
     });
   }, [onButtonClick]);
-  
 
-  const chunkArray = useCallback((array, chunkSize) => {
+
+  const chunkArray = useCallback((array: any[], chunkSize: any) => {
     const results = [];
     while (array.length) {
       results.push(array.splice(0, chunkSize));
@@ -228,7 +273,8 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }
 
   return (
     <>
-            <TabContext value={selectedTabIndex.toString()}>
+    <ThemeProvider theme={theme}>
+      <TabContext value={selectedTabIndex.toString()}>
         {isMobile ? (
           <StyledMobileStepper
             activeStep={selectedTabIndex}
@@ -273,7 +319,8 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }
                 key={tabIndex}
                 label={tab.label}
                 iconPosition="start"
-                icon={RibbonIcon({ iconName: tab.icon }).iconComponent}
+                icon={RibbonIcon({ iconName: tab.icon }).iconComponent || undefined}
+
               />
             ))}
           </StyledTabs>
@@ -286,7 +333,7 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }
             id={`tabpanel-${tabIndex}`}
             aria-labelledby={`tab-${tabIndex}`}
           >
-            {tab.buttonGroups.map((group, groupIndex) => {
+            {tab.buttonGroups.map((group: RibbonButtonGroup, groupIndex: React.Key | null | undefined) => {
               if (group.flexDirection === "column") {
                 const chunkedButtons = chunkArray([...group.buttons], 2);
 
@@ -314,7 +361,11 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }
                     }}
                     caption={group.caption}
                   >
-                    {renderButtons(group.buttons, groupIndex)}
+
+                    {
+                      //@ts-ignore
+                      renderButtons(group.buttons, groupIndex)
+                    }
                   </CustomRibbonButtonGroup>
                 );
               }
@@ -324,6 +375,7 @@ const Ribbon: React.FC<RibbonProps> = ({ ribbonTabs, customTabs, onButtonClick }
           </StyledTabPanel>
         ))}
       </TabContext>
+      </ThemeProvider>
     </>
   );
 };
