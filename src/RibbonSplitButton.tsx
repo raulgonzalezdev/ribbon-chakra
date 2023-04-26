@@ -99,18 +99,21 @@ const RibbonSplitButton: React.FC<RibbonSplitButtonProps> = ({
             Array.isArray(options) &&
             options.map((option, index) =>
               typeof option === "object" &&
-              option !== null &&
-              "type" in option &&
-              option.type === "divider" ? (
+                option !== null &&
+                "type" in option &&
+                option.type === "divider" ? (
                 <Divider key={`divider-${index}`} />
               ) : (
                 <MenuItem
                   key={typeof option === "string" ? option : `option-${index}`}
-                  selected={index === selectedIndex}
+                  bg={index === selectedIndex ? "blue.500" : undefined} // Cambia el color de fondo si está seleccionado
+                  color={index === selectedIndex ? "white" : undefined} // Cambia el color del texto si está seleccionado
+                  fontWeight={index === selectedIndex ? "bold" : undefined} // Cambia el grosor de la fuente si está seleccionado
                   onClick={(event) => handleMenuItemClick(event, index)}
                 >
                   {typeof option === "string" ? option : ""}
                 </MenuItem>
+
               )
             )}
         </MenuList>

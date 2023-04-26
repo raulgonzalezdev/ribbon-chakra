@@ -7,8 +7,8 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
   },
   resolve: {
-    extensions: [".tsx", ".ts", ".js", ".json"],
-    modules: [path.resolve(__dirname, "node_modules"), "node_modules"],
+    extensions: [".tsx", ".ts", ".jsx", ".js", ".json"],
+    modules: ["node_modules"],
   },
   module: {
     rules: [
@@ -29,4 +29,3 @@ module.exports = {
     ],
   },
 };
-

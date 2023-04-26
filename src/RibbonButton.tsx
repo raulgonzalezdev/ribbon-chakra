@@ -9,7 +9,7 @@ export interface RibbonButtonProps {
 }
 
 const RibbonButton: React.FC<RibbonButtonProps> = ({
-  buttonKey,
+
   icon,
   caption,
   onClick,

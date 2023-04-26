@@ -26,7 +26,8 @@ import {
 const Ribbon: React.FC<RibbonProps> = ({ customTabs, onButtonClick }) => {
   const tabsToUse = customTabs ? customTabs : ribbonTabs ? ribbonTabs : [];
   const [selectedTabIndex, setSelectedTabIndex] = React.useState(0);
-  const [selectedPanelContent, setSelectedPanelContent] = React.useState(null);
+  const [selectedPanelContent, setSelectedPanelContent] = React.useState<RibbonButtonGroup[] | null>(null);
+
 
 
   React.useEffect(() => {
@@ -99,13 +100,16 @@ const Ribbon: React.FC<RibbonProps> = ({ customTabs, onButtonClick }) => {
 
   const renderReactComponent = useCallback(
     (button: RibbonButtonType, index: number) => {
-      const Component = getChakraComponent(button.component);
+      const Component = getChakraComponent(button.component || "");
+
   
       if (!Component) return null;
       const wrappedComponent =
         button.component === "Select" ? (
-          <Component onChange={button.onChange}>
-            {button.options.items.map((item, itemIndex) => (
+          <Component {...(button.options || {})} onChange={button.onChange}>
+
+           {button.options.items.map((item: { value: string; label: string }, itemIndex: number) => (
+
               <option key={itemIndex} value={item.value}>
                 {item.label}
               </option>
@@ -130,12 +134,16 @@ const Ribbon: React.FC<RibbonProps> = ({ customTabs, onButtonClick }) => {
   );
   
   
-  const getChakraComponent = (componentName) => {
-    return ChakraUIComponents[componentName];
+  const getChakraComponent = (componentName: string) => {
+
+    return ((ChakraUIComponents as unknown) as Record<string, React.ComponentType>)[componentName];
+
+
   };
   
 
-  const MyTab = ({ selected, children, ...rest }) => (
+  const MyTab = ({ selected, children, ...rest }: { selected: boolean; children: React.ReactNode }) => (
+
     <Tab
       fontSize="0.8rem"
       fontWeight="bold"
@@ -206,7 +214,8 @@ const Ribbon: React.FC<RibbonProps> = ({ customTabs, onButtonClick }) => {
       overflowY="auto"
        >
         {selectedPanelContent &&
-          selectedPanelContent.map((group: RibbonButtonGroup, groupIndex) => (
+          selectedPanelContent.map((group: RibbonButtonGroup, groupIndex: number) => (
+
             <CustomRibbonButtonGroup
               style={{
                 flexDirection: group.flexDirection,
@@ -217,7 +226,8 @@ const Ribbon: React.FC<RibbonProps> = ({ customTabs, onButtonClick }) => {
               key={groupIndex}
               caption={group.caption}
             >
-              {renderButtonsWithFlexDirection(group.flexDirection, group.buttons)}
+             {renderButtonsWithFlexDirection(group.flexDirection || "", group.buttons)}
+
             </CustomRibbonButtonGroup>
           ))}
       </Box>

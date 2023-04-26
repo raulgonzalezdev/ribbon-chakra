@@ -27,12 +27,12 @@ export interface ButtonProps {
 export interface RibbonProps {
  
   customTabs?: any[]; // Agrega esta línea
-  onButtonClick?: (button: typeof RibbonButton) => void;
+  onButtonClick?: (button: RibbonButton) => void;
 }
 
 export interface RibbonButtonGroup {
   caption?: string;
   flexDirection?: "row" | "column";
-  buttons: typeof RibbonButton[];
+  buttons: RibbonButton[];
 
 }
