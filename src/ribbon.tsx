@@ -63,7 +63,7 @@ const Ribbon: React.FC<RibbonProps> = ({ customTabs, onButtonClick }) => {
         buttonKey: index,
         caption: button.caption,
         icon: ribbonIconResult.iconComponent,
-        displayIcon: ribbonIconResult.displayIcon, // Agrega esta línea
+        displayIcon: ribbonIconResult.displayIcon, 
         onClick: () => {
           console.log(`Clic en el botón: ${button.icon}`);
           button.onClick && button.onClick();
@@ -142,26 +142,60 @@ const Ribbon: React.FC<RibbonProps> = ({ customTabs, onButtonClick }) => {
   };
   
 
-  const MyTab = ({ selected, children, ...rest }: { selected: boolean; children: React.ReactNode }) => (
+  const tabColors = [
+    "#ffcd3a",
+    "#c40b0a",
+    "#00c642",
+    "#8956ff",
+    "#c836c3",
+    "#00c642",
+    "#29abe2",
+    "#70b8ff",
+    "#cb3837",
+    "#000",
+    "#cb3837",
+    "#fb3e44",
+  ];
+  
 
-    <Tab
-      fontSize="0.8rem"
-      fontWeight="bold"
-      padding="0.5rem 0.75rem"
-      borderRadius="6px 6px 0 0"
-      borderTop="1px solid #E2E8F0"
-      borderLeft="1px solid #E2E8F0"
-      borderRight="1px solid #E2E8F0"
-      borderBottom={selected ? "1px solid transparent" : "1px solid #E2E8F0"}
-      backgroundColor={selected ? "#F7FAFC" : ""}
-      color={selected ? "#0078d4" : "#4A5568"}
-      cursor="pointer"
-      _hover={{ backgroundColor: "#f5f5f5" }}
-      {...rest}
-    >
-      {children}
-    </Tab>
-  );
+  const getColorByIndex = (index: number) => {
+    return tabColors[index % tabColors.length];
+  };
+  
+
+  const MyTab = ({
+    selected,
+    children,
+    tabIndex,
+    ...rest
+  }: {
+    selected: boolean;
+    children: React.ReactNode;
+    tabIndex: number;
+  }) => {
+    const color = getColorByIndex(tabIndex);
+  
+    return (
+      <Tab
+        fontSize="0.8rem"
+        fontWeight="bold"
+        padding="0.5rem 0.75rem"
+        borderRadius="6px 6px 0 0"
+        borderTop={`1px solid ${color}`}
+        borderLeft={`1px solid ${color}`}
+        borderRight={`1px solid ${color}`}
+        borderBottom={selected ? "1px solid transparent" : `1px solid ${color}`}
+        backgroundColor={selected ? "#F7FAFC" : ""}
+        color={selected ? color : "#4A5568"}
+        cursor="pointer"
+        _hover={{ backgroundColor: "#f5f5f5" }}
+        {...rest}
+      >
+        {children}
+      </Tab>
+    );
+  };
+  
 
    
   const renderButtonsWithFlexDirection = (

@@ -14,17 +14,22 @@ En el cuerpo del componente principal se encuentra la función handleButtonClick
 - Fácil de usar e integrar en tus proyectos
 - Soporte para diferentes componentes de entrada
 
+## Demo
+
+![Demo](https://raw.githubusercontent.com/raulgonzalezdev/ribbon-react-menu/main/public/demo.gif)
+
+
 ## Instalación
 
 Para instalar Ribbon React Menu, ejecuta el siguiente comando:
 
 ```bash
-npm install ribbon-react-menu
+npm install ribbon-chakra
 ```
 o
 
 ```bash
-yarn add ribbon-react-menu
+yarn add ribbon-chakra
 
 ```
 
@@ -34,7 +39,7 @@ yarn add ribbon-react-menu
 
 
 ```bash
-import Ribbon from "ribbon-react-menu";
+import Ribbon from "ribbon-chakra";
 
 ```
 2. Utiliza el componente Ribbon en tu aplicación, proporcionando las propiedades necesarias:
@@ -67,7 +72,7 @@ En este caso, el objeto ribbonTabs define varias pestañas, cada una con grupos 
 import React, { useState } from 'react';
 
 // Importamos el componente Ribbon desde la librería "ribbon-react-menu"
-import Ribbon from "ribbon-react-menu";
+import Ribbon from "ribbon-chakra";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { styled } from '@mui/system';
 import { Box } from "@mui/material";
