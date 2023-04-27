@@ -16,7 +16,8 @@ En el cuerpo del componente principal se encuentra la función handleButtonClick
 
 ## Demo
 
-Video demostracion: [Demo](https://github.com/raulgonzalezdev/ribbon-react-menu/blob/master/public/demo.gif)
+Video demostracion: ![Demo](https://github.com/raulgonzalezdev/ribbon-react-menu/blob/master/public/demo.gif)
+![Demo](https://raw.githubusercontent.com/raulgonzalezdev/ribbon-react-menu/master/public/demo.gif)
 
 
 ## Instalación
