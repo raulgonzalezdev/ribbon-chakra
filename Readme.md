@@ -16,8 +16,8 @@ En el cuerpo del componente principal se encuentra la función handleButtonClick
 
 ## Demo
 
-Video demostracion: ![Demo](https://github.com/raulgonzalezdev/ribbon-react-menu/blob/master/public/demo.gif)
-![Demo](https://raw.githubusercontent.com/raulgonzalezdev/ribbon-react-menu/master/public/demo.gif)
+
+![Demo](https://raw.githubusercontent.com/raulgonzalezdev/ribbon-charka/master/public/demo.gif)
 
 
 ## Instalación
@@ -215,15 +215,11 @@ export default App;
 Este proyecto utiliza las siguientes dependencias:
 
 
-**@mui/icons-material**
-**@mui/lab**
-**@mui/material**
-**@mui/system**
-**@emotion/react**
-**@emotion/styled**
-**next**
-**react**
-**react-dom**
+    "@chakra-ui/icons": "^2.0.19",
+    "@chakra-ui/react": "^2.6.0",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/icons-material": "^5.11.16",
 
 ## Desarrollo
 
