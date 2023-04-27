@@ -16,8 +16,8 @@ En el cuerpo del componente principal se encuentra la función handleButtonClick
 
 ## Demo
 
-
-![Demo](https://raw.githubusercontent.com/raulgonzalezdev/ribbon-charka/master/public/demo.gif)
+Video demostracion: ![Demo](https://github.com/raulgonzalezdev/ribbon-chakra/blob/master/public/demo.gif)
+![Demo](https://raw.githubusercontent.com/raulgonzalezdev/ribbon-chakra/master/public/demo.gif)
 
 
 ## Instalación
